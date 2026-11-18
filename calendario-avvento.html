@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calendario d’Avvento</title>
+<style>
+:root{--bg:#fffaf0;--fg:#2b2b2b;--card:#fff;--line:#3d8b2a;--trunk:#4e2c13;--muted:#6b6b6b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14201a;--fg:#f3efe6;--card:#22302a;--line:#6fcf55;--trunk:#8a5a34;--muted:#b5b5b5}}
+:root[data-theme="dark"]{--bg:#14201a;--fg:#f3efe6;--card:#22302a;--line:#6fcf55;--trunk:#8a5a34;--muted:#b5b5b5}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Trebuchet MS",system-ui,sans-serif;text-align:center}
+h1{font-size:clamp(1.3rem,4vw,2rem);margin:.8rem 1rem .2rem}
+p.sub{margin:0 1rem;color:var(--muted)}
+svg{width:100%;max-width:760px;height:auto;display:block;margin:0 auto}
+.ball{cursor:pointer;outline:none}
+.ball:hover circle.b,.ball:focus circle.b{stroke:#fff;stroke-width:5}
+.ball text{font-family:"Arial Black",Impact,sans-serif;fill:#fff;text-anchor:middle;pointer-events:none}
+.ball.done{opacity:.55}
+#ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:5}
+#ov.on{display:flex}
+.card{background:var(--card);color:var(--fg);max-width:460px;width:100%;border-radius:20px;padding:24px 22px;box-shadow:0 10px 40px rgba(0,0,0,.4);border-top:10px solid var(--c)}
+.num{display:inline-block;background:var(--c);color:#fff;font:900 1.6rem "Arial Black",sans-serif;border-radius:50%;width:56px;height:56px;line-height:56px}
+.val{font-size:1.1rem;text-transform:uppercase;letter-spacing:.08em;margin:.6rem 0;color:var(--c);filter:brightness(.85);font-weight:bold}
+.frase{font-size:1.35rem;line-height:1.4;margin:.4rem 0 1rem}
+.az{background:rgba(127,127,127,.15);border-radius:12px;padding:10px 12px;font-size:1rem;text-align:left}
+button{margin-top:16px;font-size:1rem;padding:10px 22px;border:0;border-radius:999px;background:#b32535;color:#fff;cursor:pointer}
+.row{display:flex;gap:8px;justify-content:center}
+@keyframes pop{0%{transform:scale(.3) rotate(-6deg);opacity:0}60%{transform:scale(1.08) rotate(2deg);opacity:1}100%{transform:scale(1) rotate(0)}}
+@keyframes spin{0%{transform:rotateY(0) scale(.5)}100%{transform:rotateY(360deg) scale(1)}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes wob{0%,100%{transform:scale(1)}30%{transform:scale(1.25) rotate(-8deg)}60%{transform:scale(.95) rotate(6deg)}}
+#ov.on{animation:fade .25s ease-out}
+.card.pop{animation:pop .5s cubic-bezier(.2,1.2,.4,1)}
+.card.pop .num{animation:spin .7s ease-out}
+.ball{transform-box:fill-box;transform-origin:center}
+.ball.wob{animation:wob .5s ease-out}
+#snow{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.fl{position:absolute;top:-40px;color:#fff;text-shadow:0 0 6px rgba(120,170,255,.9);animation:fall linear forwards}
+@keyframes fall{to{transform:translate(var(--dx),115vh) rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){#snow{display:none}#ov.on,.card.pop,.card.pop .num,.ball.wob{animation:none}}
+</style>
+</head>
+<body>
+<h1>🎄 Calendario d’Avvento</h1>
+<p class="sub">Clicca su una pallina per scoprire la frase del giorno</p>
+<svg id="tree" viewBox="360 20 1240 1080" role="img" aria-label="Albero di Natale con 25 palline numerate">
+<defs><radialGradient id="g" cx=".35" cy=".25" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".45"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></radialGradient></defs>
+<polygon points="887,975 1060,975 1100,1075 847,1075" fill="var(--trunk)"/>
+<g fill="none" stroke="var(--line)" stroke-width="6" stroke-linecap="round">
+<path d="M983,70C970,170 920,230 860,248M848,250L936,256M936,242C920,330 860,380 780,414M768,416C800,435 850,435 884,426M884,426C860,520 760,590 636,636M625,637C680,668 750,668 796,651M796,651C720,750 560,840 410,873M396,875C420,940 700,975 980,975C1300,975 1540,950 1570,895"/>
+<path d="M988,72C1000,170 1060,230 1120,242M1040,242L1130,242M1048,250C1090,330 1150,380 1216,408M1104,423C1150,430 1190,420 1216,408M1108,436C1160,540 1260,600 1366,636M1201,648C1250,660 1320,655 1366,636M1206,660C1250,760 1400,840 1568,895"/>
+</g>
+<g fill="var(--line)"><circle cx="848" cy="250" r="11"/><circle cx="936" cy="242" r="11"/><circle cx="1040" cy="242" r="11"/><circle cx="1131" cy="242" r="11"/><circle cx="768" cy="416" r="11"/><circle cx="884" cy="426" r="11"/><circle cx="1103" cy="423" r="11"/><circle cx="1216" cy="408" r="11"/><circle cx="625" cy="637" r="11"/><circle cx="796" cy="651" r="11"/><circle cx="1201" cy="648" r="11"/><circle cx="1366" cy="636" r="11"/><circle cx="396" cy="875" r="11"/><circle cx="1569" cy="895" r="11"/></g>
+<circle cx="984" cy="52" r="17" fill="#b32535"/>
+<g id="balls"></g>
+</svg>
+<div id="ov" role="dialog" aria-modal="true" aria-labelledby="fr"><div id="snow"></div><div class="card" id="card">
+<span class="num" id="n"></span><div class="val" id="v"></div><p class="frase" id="fr"></p>
+<div class="az" id="az"></div>
+<div class="row"><button id="prev" aria-label="Precedente">←</button><button id="x">Chiudi</button><button id="next" aria-label="Successivo">→</button></div>
+</div></div>
+<script>
+const R="#b32535",O="#d9822b",Y="#e8b730",G="#5ea34e",B="#3f8fd8",P="#6b3f93";
+// numero, x, y, raggio, colore
+const P_=[[1,614,892,59,R],[2,744,926,26,O],[3,864,906,40,Y],[4,996,908,51,G],[5,1139,896,58,B],[6,1299,906,34,P],[7,1417,893,30,Y],[8,1229,786,46,R],[9,1115,726,60,B],[10,1003,814,24,O],[11,973,707,39,R],[12,861,795,38,O],[13,742,810,46,G],[14,823,696,26,B],[15,926,635,37,P],[16,1084,562,52,Y],[17,1178,585,22,G],[18,937,514,58,O],[19,833,598,39,R],[20,950,386,50,B],[21,1032,460,37,P],[22,1042,337,42,G],[23,986,271,29,O],[24,981,206,24,Y],[25,986,158,17,R]];
+const T=[
+["Amicizia","Un amico ti vede come sei e ti vuole bene lo stesso.","Saluta per nome un compagno con cui parli poco."],
+["Responsabilità","Ognuno ha un compito: quando lo porti a termine, aiuti tutti.","Prenditi cura di qualcosa in classe, senza che te lo chiedano."],
+["Impegno","Un piccolo passo ogni giorno vale più di un grande salto una volta sola.","Scegli una cosa difficile e provala per dieci minuti."],
+["Gentilezza","Una parola gentile non costa nulla ma vale moltissimo.","Di’ «grazie» a qualcuno che di solito non ringrazi."],
+["Rispetto","Rispettare vuol dire ascoltare anche quando non la pensi come l’altro.","Ascolta un compagno fino alla fine, senza interromperlo."],
+["Collaborazione","Da soli si va veloci, insieme si va lontano.","Offri aiuto a un compagno in un lavoro di gruppo."],
+["Onestà","La verità pesa meno di una bugia da portare in giro.","Racconta con sincerità un tuo errore, senza dare la colpa agli altri."],
+["Coraggio","Coraggio non è non avere paura, ma fare la cosa giusta nonostante la paura.","Alza la mano per dire un’idea o fare una domanda."],
+["Perdono","Chiedere scusa e perdonare rendono il cuore più leggero.","Fai pace con qualcuno con cui hai litigato."],
+["Pazienza","Le cose belle hanno bisogno di tempo: aspetta il tuo turno con calma.","Aspetta il tuo turno senza lamentarti."],
+["Inclusione","Fai posto a qualcuno: nessuno dovrebbe sentirsi solo.","Invita qualcuno a giocare o a lavorare con te."],
+["Gratitudine","Ogni giorno ha qualcosa di buono: trovalo e ringrazia.","Scrivi una cosa bella successa oggi e condividila."],
+["Responsabilità","Se sbagli, riconoscilo: è il primo passo per migliorare.","Riprendi un lavoro lasciato a metà e finiscilo bene."],
+["Impegno","Sbagliare fa parte dell’imparare: l’importante è riprovare.","Riprova un esercizio che ti è venuto male."],
+["Ascolto","Abbiamo due orecchie e una bocca: ascolta il doppio di quanto parli.","Per tutta la mattina, prima di rispondere conta fino a tre."],
+["Generosità","Condividere raddoppia la gioia.","Presta o condividi qualcosa con un compagno."],
+["Cura della classe","La classe è la nostra casa: prendersene cura è un modo per volerci bene.","Lascia il tuo banco e lo spazio intorno più in ordine di come l’hai trovato."],
+["Amicizia","Un vero amico dice la verità con gentilezza e resta quando le cose si fanno difficili.","Scrivi un biglietto di incoraggiamento a un amico."],
+["Empatia","Prima di giudicare, prova a immaginare che cosa sente l’altro.","Chiedi a un compagno: «Come stai, davvero?»"],
+["Diversità","Siamo tutti diversi, e proprio per questo la classe è più ricca.","Scopri una cosa nuova di un compagno: un talento o una passione."],
+["Fiducia","La fiducia si costruisce con piccole promesse mantenute.","Fai una promessa piccola e mantienila oggi."],
+["Perseveranza","Anche la montagna più alta si scala un passo alla volta.","Non mollare al primo ostacolo: prova almeno tre strade diverse."],
+["Pace","I conflitti si risolvono con le parole, non con le mani.","Se nasce un litigio, fermati e spiega come ti senti."],
+["Speranza","Ogni gesto buono è un seme: oggi lo pianti, domani fiorisce.","Fai un gesto buono e non dirlo a nessuno."],
+["Buon Natale!","Il regalo più bello è il bene che abbiamo coltivato insieme.","Dite insieme un augurio a tutta la classe."]];
+let done=new Set(),cur=1;
+try{done=new Set(JSON.parse(localStorage.getItem("avvento")||"[]"))}catch(e){}
+const g=document.getElementById("balls"),NS="http://www.w3.org/2000/svg";
+P_.forEach(([n,x,y,r,c])=>{
+ const e=document.createElementNS(NS,"g");e.setAttribute("class","ball"+(done.has(n)?" done":""));e.id="b"+n;
+ e.setAttribute("tabindex","0");e.setAttribute("role","button");e.setAttribute("aria-label","Giorno "+n);
+ e.innerHTML=`<circle class="b" cx="${x}" cy="${y}" r="${r}" fill="${c}"/><circle cx="${x}" cy="${y}" r="${r}" fill="url(#g)"/><text x="${x}" y="${y+r*.34}" font-size="${r*.95}">${n}</text>`;
+ e.onclick=()=>open(n);e.onkeydown=k=>{if(k.key==="Enter"||k.key===" "){k.preventDefault();open(n)}};
+ g.appendChild(e)});
+const ov=document.getElementById("ov");
+function open(n){
+ cur=n;const t=T[n-1],c=P_[n-1][4];
+ document.getElementById("card").style.setProperty("--c",c);
+ document.getElementById("n").textContent=n;
+ document.getElementById("v").textContent=t[0];
+ document.getElementById("fr").textContent="«"+t[1]+"»";
+ document.getElementById("az").textContent="✨ Oggi in classe: "+t[2];
+ ov.classList.add("on");
+ const cd=document.getElementById("card"),bl=document.getElementById("b"+n);
+ cd.classList.remove("pop");bl.classList.remove("wob");void cd.offsetWidth;cd.classList.add("pop");bl.classList.add("wob");snow();
+ done.add(n);document.getElementById("b"+n).classList.add("done");
+ try{localStorage.setItem("avvento",JSON.stringify([...done]))}catch(e){}
+}
+function snow(){
+ const s=document.getElementById("snow");s.innerHTML="";
+ for(let i=0;i<40;i++){
+  const f=document.createElement("span");f.className="fl";f.textContent=Math.random()<.7?"❄":"❅";
+  const d=2.5+Math.random()*2.5;
+  f.style.cssText=`left:${Math.random()*100}%;font-size:${12+Math.random()*20}px;opacity:${.6+Math.random()*.4};animation-duration:${d}s;animation-delay:${Math.random()*1.5}s;--dx:${(Math.random()-.5)*120}px`;
+  s.appendChild(f)}
+}
+const close=()=>ov.classList.remove("on");
+document.getElementById("x").onclick=close;
+document.getElementById("prev").onclick=()=>open(cur>1?cur-1:25);
+document.getElementById("next").onclick=()=>open(cur<25?cur+1:1);
+ov.onclick=e=>{if(e.target===ov)close()};
+document.onkeydown=e=>{if(e.key==="Escape")close()};
+</script>
+</body>
+</html>

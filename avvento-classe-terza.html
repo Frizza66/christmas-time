@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>L’albero dei 25 pensieri</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f8f1;--ink:#17301f;--card:#ffffff;--muted:#5b6f60;--accent:#1e5b2c;--shadow:rgba(20,50,30,.25);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1c16;--ink:#e8f3e9;--card:#1b2e24;--muted:#a3b8a8;--accent:#7cc98b;--shadow:rgba(0,0,0,.6)}}
+:root[data-theme="dark"]{--bg:#0f1c16;--ink:#e8f3e9;--card:#1b2e24;--muted:#a3b8a8;--accent:#7cc98b;--shadow:rgba(0,0,0,.6)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Baloo 2",system-ui,-apple-system,"Segoe UI",sans-serif;text-align:center;min-height:100vh}
+header{padding:18px 16px 4px}
+h1{margin:0;font-size:clamp(1.5rem,5vw,2.4rem);font-weight:800;color:var(--accent)}
+header p{margin:2px 0 0;color:var(--muted);font-size:1.05rem}
+.counter{display:inline-block;margin-top:6px;padding:2px 14px;border-radius:99px;background:var(--card);box-shadow:0 1px 4px var(--shadow);font-size:.95rem}
+main{max-width:820px;margin:0 auto;padding:0 10px 24px}
+svg{width:100%;height:auto;max-height:78vh;display:block;margin:0 auto}
+.ball{cursor:pointer;outline:none}
+.ball .b{transform-box:fill-box;transform-origin:center;transition:transform .15s}
+.ball:hover .b,.ball:focus-visible .b{transform:scale(1.14)}
+.ball:focus-visible circle.b{stroke:#fff;stroke-width:4}
+.ball.done{opacity:.5}
+.ball text{pointer-events:none;fill:#fff;font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;text-anchor:middle;paint-order:stroke;stroke:rgba(0,0,0,.18);stroke-width:2px}
+#ov{position:fixed;inset:0;background:rgba(5,20,10,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:20}
+#ov.on{display:flex}
+.card{background:var(--card);max-width:480px;width:100%;border-radius:22px;padding:26px 24px 22px;box-shadow:0 12px 40px var(--shadow);position:relative;animation:pop .25s ease}
+@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
+.num{width:64px;height:64px;border-radius:50%;margin:-58px auto 10px;display:grid;place-items:center;color:#fff;font-size:1.9rem;font-weight:800;box-shadow:0 4px 10px var(--shadow)}
+.tag{font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.msg{font-size:1.3rem;line-height:1.4;margin:10px 0 18px;font-weight:700}
+button.close{font:inherit;font-weight:700;font-size:1rem;border:0;border-radius:99px;padding:8px 26px;background:var(--accent);color:var(--bg);cursor:pointer}
+@media (prefers-reduced-motion:reduce){.card{animation:none}.ball .b{transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>L’albero dei 25 pensieri</h1>
+  <p>Tocca un numero e scopri il messaggio per te ✨</p>
+  <span class="counter">Letti: <b id="cnt">0</b> / 25</span>
+</header>
+<main>
+<svg viewBox="370 20 1230 1070" role="group" aria-label="Albero con 25 palline numerate">
+  <defs id="defs"></defs>
+  <polygon points="885,965 1060,965 1100,1075 847,1075" fill="#4d2c14"/>
+  <path d="M984,60 Q960,200 848,250 Q900,248 936,242 Q900,360 768,417 Q830,432 884,426 Q850,560 625,638 Q710,672 796,651 Q650,830 396,875 Q500,975 980,975 Q1500,975 1569,895 Q1330,800 1201,648 Q1290,655 1366,637 Q1200,540 1103,422 Q1170,430 1216,409 Q1090,340 1040,242 Q1090,250 1131,242 Q1010,190 988,60 Z" fill="#1d5a2c" stroke="#2f8a43" stroke-width="7" stroke-linejoin="round"/>
+  <g fill="#3a9a4e" id="tips"></g>
+  <circle cx="984" cy="52" r="18" fill="#c0272d"/>
+  <g id="balls"></g>
+</svg>
+</main>
+
+<div id="ov" role="dialog" aria-modal="true" aria-labelledby="msg">
+  <div class="card">
+    <div class="num" id="cn">1</div>
+    <div class="tag" id="ct"></div>
+    <p class="msg" id="msg"></p>
+    <button class="close" id="x">Grazie! 🎄</button>
+  </div>
+</div>
+
+<script>
+var T={S:"La scuola superiore",A:"Nuovi amici",D:"Nuovi docenti",F:"I tuoi punti di forza",E:"L’ultimo anno e l’esame"};
+var P=[
+["F","Sei arrivato fin qui con impegno e curiosità: sono i tuoi superpoteri. Portali con te ovunque andrai."],
+["S","Scegliere la scuola superiore non significa scegliere il tuo futuro per sempre: significa iniziare a costruirlo."],
+["A","Un sorriso e un “ciao” sono il modo più semplice per cominciare un’amicizia. Tu sei bravo a farlo!"],
+["D","I nuovi professori non vedono l’ora di conoscerti: mostra loro chi sei, con le tue domande e le tue idee."],
+["E","Ogni giorno di quest’ultimo anno è un mattoncino. Non devi essere perfetto, devi solo andare avanti."],
+["F","Hai qualcosa che nessun altro ha: il tuo modo di vedere le cose. Non nasconderlo mai."],
+["S","Scegli la scuola che ti fa brillare gli occhi, non quella che scelgono tutti. Il tuo cuore sa più di quanto credi."],
+["A","Gli amici di sempre restano nel cuore, e quelli nuovi stanno già aspettando di incontrarti."],
+["E","L’esame non è un giudizio su di te: è l’occasione di dimostrare tutto quello che hai imparato in questi anni."],
+["F","Anche quando inciampi, ti rialzi. Questa si chiama forza, e tu ne hai da vendere."],
+["D","Chiedere aiuto non è una debolezza: i bravi insegnanti amano gli studenti che hanno il coraggio di domandare."],
+["S","Nessuna strada è sbagliata se la percorri con impegno. E si può sempre cambiare direzione."],
+["A","Sii gentile, sii te stesso: le persone giuste si avvicineranno proprio per questo."],
+["E","Respira. Un passo alla volta, una pagina alla volta. Hai già superato sfide più difficili."],
+["F","La tua curiosità è un motore: continua a chiederti “perché?” e andrai lontano."],
+["D","Ogni docente che incontrerai avrà qualcosa da insegnarti, e anche tu avrai qualcosa da insegnare a lui."],
+["S","Ai nuovi inizi si arriva con un po’ di paura e tanta voglia: è esattamente come deve essere."],
+["A","Nella nuova classe ci sarà qualcuno emozionato quanto te. Fai tu il primo passo!"],
+["E","Studiare con costanza batte studiare all’ultimo minuto. Un poco ogni giorno e ti sentirai pronto."],
+["F","Il tuo impegno non passa inosservato: chi ti circonda lo vede, anche quando tu non lo senti."],
+["S","Gli open day, le domande, i dubbi: è così che si sceglie bene. Prenditi il tuo tempo."],
+["D","Il rispetto e l’educazione aprono tutte le porte, nelle aule nuove come in quelle di sempre."],
+["E","Credi nel lavoro che hai fatto: all’esame porterai tutto quello che sei diventato."],
+["A","Le amicizie più belle nascono dove non te lo aspetti: un banco vicino, una battuta, una risata."],
+["F","Il futuro è tuo. Hai talento, hai coraggio, hai tutto il tempo per scoprire quanto puoi fare. In bocca al lupo! 🌟"]
+];
+var C=[["#e8707a","#9e1f2e"],["#f0b070","#c9722a"],["#f6d56a","#d6a62e"],["#9cd098","#4f9a52"],["#7ec0f4","#3a86cc"],["#a07cc8","#5a2d82"]];
+var B=[[614,892,59],[744,925,26],[864,906,41],[996,908,51],[1139,896,58],[1299,906,34],[1417,893,29],[1229,785,46],[1115,726,60],[1003,814,24],[973,707,40],[861,795,38],[742,810,46],[823,696,25],[926,635,37],[1084,562,52],[1178,585,22],[937,514,58],[833,598,39],[949,386,50],[1032,459,37],[1042,337,42],[986,270,29],[981,206,24],[986,157,17]];
+var tipsPts=[[848,250],[936,242],[768,417],[884,426],[625,638],[796,651],[396,875],[1569,895],[1366,637],[1201,648],[1216,409],[1103,422],[1131,242],[1040,242]];
+var NS="http://www.w3.org/2000/svg",$=function(i){return document.getElementById(i)};
+function el(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+var defs=$("defs");
+C.forEach(function(c,i){var g=el("linearGradient",{id:"g"+i,x1:0,y1:0,x2:0,y2:1},defs);el("stop",{offset:"0","stop-color":c[0]},g);el("stop",{offset:"1","stop-color":c[1]},g)});
+tipsPts.forEach(function(p){el("circle",{cx:p[0],cy:p[1],r:13},$("tips"))});
+var seen={};
+try{seen=JSON.parse(localStorage.getItem("albero-letti")||"{}")}catch(e){}
+function upd(){var n=0;for(var k in seen)if(seen[k])n++;$("cnt").textContent=n}
+var last=null;
+function open(n,g){
+  var p=P[n-1];last=g;
+  $("cn").textContent=n;$("cn").style.background="linear-gradient(180deg,"+C[(n-1)%6][0]+","+C[(n-1)%6][1]+")";
+  $("ct").textContent=T[p[0]];$("msg").textContent=p[1];
+  $("ov").classList.add("on");$("x").focus();
+  seen[n]=1;g.classList.add("done");upd();
+  try{localStorage.setItem("albero-letti",JSON.stringify(seen))}catch(e){}
+}
+function close(){$("ov").classList.remove("on");if(last)last.focus()}
+B.forEach(function(b,i){
+  var n=i+1,ci=i%6;
+  var g=el("g",{"class":"ball"+(seen[n]?" done":""),tabindex:0,role:"button","aria-label":"Messaggio numero "+n},$("balls"));
+  el("circle",{cx:b[0],cy:b[1],r:Math.max(b[2],24)+6,fill:"transparent"},g);
+  el("circle",{"class":"b",cx:b[0],cy:b[1],r:b[2],fill:"url(#g"+ci+")"},g);
+  var t=el("text",{x:b[0],y:b[1],dy:".35em","font-size":b[2]*(n<10?1.25:1.0)},g);t.textContent=n;
+  g.addEventListener("click",function(){open(n,g)});
+  g.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();open(n,g)}});
+});
+$("x").addEventListener("click",close);
+$("ov").addEventListener("click",function(e){if(e.target===this)close()});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")close()});
+upd();
+</script>
+</body>
+</html>
