@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Our Advent Calendar</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Nunito:wght@600;800&display=swap">
+<style>
+:root{--page:#1a2c4e;--ink:#fbeee3;--dink:#3b1a14;--board:#9b2230;--board2:#861c28;--card:#fffaf3;--gold:#ffc94a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--page:#0f1a33;--card:#2c1a1d;--dink:#fbeee3}}
+:root[data-theme="dark"]{--page:#0f1a33;--card:#2c1a1d;--dink:#fbeee3}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:inherit}
+body{margin:0;background:linear-gradient(#0a1226,var(--page)) fixed;color:var(--ink);font-family:"Nunito",system-ui,sans-serif;font-weight:600;line-height:1.5}
+main{max-width:1000px;margin:0 auto;padding:20px 12px 40px}
+h1{font:700 clamp(1.8rem,5vw,2.8rem)/1.1 "Fredoka",system-ui,sans-serif;margin:8px 0 4px;text-align:center}
+.sub{text-align:center;margin:0 0 18px;max-width:60ch;margin-inline:auto}
+.board{background:repeating-linear-gradient(0deg,transparent 0 38px,rgba(0,0,0,.12) 38px 40px),var(--board);border-radius:14px;padding:26px 14px 30px;display:flex;flex-direction:column;gap:34px;box-shadow:0 6px 0 var(--board2)}
+.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:flex-end}
+.row.rev{flex-direction:row-reverse}
+.house{--c:#4a5db0;position:relative;width:78px;height:76px;border:0;padding:14px 0 0;cursor:pointer;color:#2a1410;font:700 1.35rem/1 "Fredoka",system-ui,sans-serif;background:linear-gradient(#fff 0 34%,var(--c) 34% 100%);clip-path:polygon(50% 0,100% 30%,100% 100%,0 100%,0 30%);transition:transform .15s}
+.house:nth-child(odd){transform:translateY(-8px)}
+.house:hover{transform:translateY(-14px)}
+.house:focus-visible{outline:3px solid var(--gold);outline-offset:-4px}
+.house span{display:block;margin-top:9px;background:#fff;border-radius:6px;width:44px;margin-inline:auto;padding:5px 0 4px}
+.house.seen{background:linear-gradient(#fff 0 34%,var(--gold) 34% 100%)}
+.house.seen span::after{content:" ✓";font-size:.8rem}
+.c0{--c:#d96a9c}.c1{--c:#e4833a}.c2{--c:#3c4a9e}.c3{--c:#2f6b4f}.c4{--c:#7d6a55}.c5{--c:#6a9ccf}
+dialog{border:0;border-radius:18px;padding:0;width:min(440px,92vw);background:var(--card);color:var(--dink);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+dialog::backdrop{background:rgba(40,8,12,.65)}
+.top{background:var(--board);color:#fff;padding:16px 20px;font:700 1.1rem "Fredoka",system-ui,sans-serif;display:flex;justify-content:space-between}
+.body{padding:20px}
+.msg{font:700 1.45rem/1.35 "Fredoka",system-ui,sans-serif;margin:0 0 16px}
+.word{background:rgba(255,201,74,.3);border-radius:10px;padding:10px 14px;margin:0 0 18px}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btns button{font:800 1rem "Nunito",system-ui,sans-serif;border:2px solid var(--board);background:transparent;color:var(--dink);border-radius:999px;padding:8px 18px;cursor:pointer}
+.btns .main{background:var(--board);color:#fff}
+.btns button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.sky,.lights,.trees{position:fixed;left:0;width:100%;z-index:-1;pointer-events:none}
+.sky{top:0;height:100%;background:radial-gradient(circle,#fff 0 1px,transparent 2px) 0 0/90px 70px,radial-gradient(circle,#ffe9a8 0 1.5px,transparent 2.5px) 40px 30px/130px 110px}
+.lights{top:0;height:46px;background:linear-gradient(#0006,#0006) 0 6px/100% 2px no-repeat,radial-gradient(circle,#ff5a5a 0 6px,transparent 7px) 0 14px/160px 40px repeat-x,radial-gradient(circle,#5bd68a 0 6px,transparent 7px) 80px 20px/160px 40px repeat-x;filter:drop-shadow(0 0 5px #ff9);animation:tw 2.4s ease-in-out infinite}
+.lights.b{background:linear-gradient(#0000,#0000) 0 0/0 0 no-repeat,radial-gradient(circle,#ffd84a 0 6px,transparent 7px) 40px 17px/160px 40px repeat-x,radial-gradient(circle,#6ab4ff 0 6px,transparent 7px) 120px 23px/160px 40px repeat-x;animation-delay:1.2s}
+@keyframes tw{0%,100%{opacity:1}50%{opacity:.35}}
+.trees{bottom:0;height:24vh;min-height:120px}
+@media (prefers-reduced-motion:reduce){.lights{animation:none}}
+@media (max-width:640px){.house{width:62px;height:62px;padding-top:11px;font-size:1.1rem}.house span{width:36px;margin-top:6px}.board{gap:22px}}
+@media (prefers-reduced-motion:reduce){.house{transition:none}}
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true"></div>
+<div class="lights" aria-hidden="true"></div>
+<div class="lights b" aria-hidden="true"></div>
+<svg class="trees" viewBox="0 0 1000 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+<defs><g id="t"><rect x="-6" y="-20" width="12" height="20" fill="#4a2f20"/><polygon points="-40,-20 40,-20 0,-80" fill="#1f5a3f"/><polygon points="-33,-55 33,-55 0,-105" fill="#27704c"/><polygon points="-25,-90 25,-90 0,-135" fill="#2f8559"/><circle cx="0" cy="-137" r="5" fill="#ffd84a"/><circle cx="-14" cy="-50" r="3.5" fill="#ff5a5a"/><circle cx="12" cy="-72" r="3.5" fill="#6ab4ff"/><circle cx="-6" cy="-98" r="3" fill="#ffd84a"/></g></defs>
+<ellipse cx="500" cy="215" rx="620" ry="42" fill="#e9f1f7"/>
+<use href="#t" transform="translate(60,190) scale(1.1)"/><use href="#t" transform="translate(170,195) scale(.8)"/><use href="#t" transform="translate(300,198) scale(.6)"/><use href="#t" transform="translate(700,198) scale(.6)"/><use href="#t" transform="translate(830,195) scale(.85)"/><use href="#t" transform="translate(950,190) scale(1.15)"/>
+</svg>
+<main>
+<h1>Our Advent Calendar</h1>
+<p class="sub">Click a house. Read the message. Say it out loud!</p>
+<div class="board" id="board"></div>
+</main>
+<dialog id="dlg" aria-labelledby="dt">
+<div class="top"><span id="dt"></span><span id="ic"></span></div>
+<div class="body">
+<p class="msg" id="tx"></p>
+<p class="word" id="wd"></p>
+<div class="btns"><button class="main" id="say">🔊 Listen</button><button id="cl">Close</button></div>
+</div>
+</dialog>
+<script>
+// [emoji, theme, message, English word, Italian]
+var D=[
+["👨‍👩‍👧","Family","Give a big hug to your family today.","hug","abbraccio"],
+["📚","Study","Open your book. Learn one new word today.","word","parola"],
+["🤝","Friends","Say hello to a friend. Smile!","smile","sorriso"],
+["🌱","Growing","You are small, but you can grow.","grow","crescere"],
+["👨‍👩‍👧","Family","Help your mum at home. Say thank you.","help","aiutare"],
+["📚","Study","Study a little every day. You can do it!","study","studiare"],
+["🤝","Friends","A good friend shares. Share your pencil today.","share","condividere"],
+["🌱","Growing","Every day, try something new.","try","provare"],
+["👨‍👩‍👧","Family","Your family loves you. You are special.","special","speciale"],
+["📚","Study","Listen to your teacher. Ask a question.","ask","chiedere"],
+["🤝","Friends","Be kind to a new classmate.","kind","gentile"],
+["🌱","Growing","Mistakes are OK. You learn from them.","mistake","errore"],
+["👨‍👩‍👧","Family","Have dinner with your family. Talk and laugh.","laugh","ridere"],
+["📚","Study","Read for ten minutes today. Books are magic!","read","leggere"],
+["🤝","Friends","Your friend is sad? Say: I am here.","sad","triste"],
+["🌱","Growing","Be brave. Say your idea in class.","brave","coraggioso"],
+["👨‍👩‍👧","Family","Call your grandma or grandpa. They love you!","grandma","nonna"],
+["📚","Study","Do your homework with a smile.","homework","compiti"],
+["🤝","Friends","Say sorry and say thank you. Friends use these words.","sorry","scusa"],
+["🌱","Growing","You are good at many things. Be proud!","proud","orgoglioso"],
+["👨‍👩‍👧","Family","Make a card for your family. Draw a heart.","heart","cuore"],
+["📚","Study","Work with a friend. Learning is fun together!","together","insieme"],
+["🤝","Friends","Friends are like gifts. Say thank you to one today.","gift","regalo"],
+["🌱","Growing","Tonight is Christmas Eve. Be happy and calm.","calm","calmo"],
+["🎄","Merry Christmas","Merry Christmas! Love your family, learn, be a good friend and keep growing.","wish","augurio"]
+];
+var rows=[[1,9,""],[10,17,"rev"],[18,25,""]],board=document.getElementById("board"),dlg=document.getElementById("dlg"),cur=0;
+rows.forEach(function(r){
+  var row=document.createElement("div");row.className="row "+r[2];
+  for(var n=r[0];n<=r[1];n++){
+    var b=document.createElement("button");
+    b.className="house c"+(n%6);b.setAttribute("aria-label","Open day "+n);
+    b.innerHTML="<span>"+n+"</span>";b.dataset.n=n;
+    b.onclick=function(){open(+this.dataset.n,this)};
+    row.appendChild(b);
+  }
+  board.appendChild(row);
+});
+function open(n,el){
+  cur=n;var d=D[n-1];
+  document.getElementById("dt").textContent="Day "+n+" – "+d[1];
+  document.getElementById("ic").textContent=d[0];
+  document.getElementById("tx").textContent=d[2];
+  document.getElementById("wd").innerHTML="New word: <b>"+d[3]+"</b> = "+d[4];
+  el.classList.add("seen");dlg.showModal();
+}
+document.getElementById("cl").onclick=function(){dlg.close()};
+document.getElementById("say").onclick=function(){
+  try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(D[cur-1][2]);u.lang="en-GB";u.rate=.8;speechSynthesis.speak(u)}catch(e){}
+};
+dlg.addEventListener("close",function(){try{speechSynthesis.cancel()}catch(e){}});
+dlg.addEventListener("click",function(e){if(e.target===dlg)dlg.close()});
+</script>
+</body>
+</html>

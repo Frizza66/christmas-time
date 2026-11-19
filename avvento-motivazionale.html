@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calendario dell’Avvento</title>
+<style>
+:root{--bg:#fbf7ef;--ink:#3a2a26;--teal:#5a9e94;--red:#f2432f;--orange:#f6a85c;--cream:#f8f3ea;--pink:#f4b9b5;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a1f1c;--ink:#f6ece0}}
+:root[data-theme="dark"]{--bg:#2a1f1c;--ink:#f6ece0}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Fredoka","Trebuchet MS",system-ui,sans-serif;padding:16px}
+h1{text-align:center;font-size:clamp(1.6rem,5vw,2.6rem);margin:8px 0 4px;font-weight:600}
+.sub{text-align:center;margin:0 auto 18px;max-width:520px;opacity:.85}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(4px,1.2vw,10px);max-width:720px;margin:0 auto}
+.d{aspect-ratio:1;border:0;border-radius:4px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;padding:clamp(4px,1.5vw,12px);font-family:inherit;position:relative;transition:transform .15s}
+.d:hover{transform:scale(1.04)}
+.d:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.n{font-size:clamp(1.3rem,5.5vw,2.8rem);font-weight:700;line-height:1}
+.i{font-size:clamp(1.4rem,6vw,3rem);align-self:flex-end;line-height:1}
+.teal{background:var(--teal)}.red{background:var(--red)}.orange{background:var(--orange)}.cream{background:var(--cream)}
+.teal .n{color:#fff}.red .n{color:#fff}.orange .n{color:#c4361f}.cream .n{color:#3d8479}
+.d.done{opacity:.55}
+.d.done::after{content:"✓";position:absolute;top:4px;right:8px;font-weight:700;color:var(--ink);font-size:1rem}
+dialog{border:0;border-radius:14px;padding:0;max-width:min(440px,92vw);width:100%;background:var(--cream);color:#3a2a26}
+dialog::backdrop{background:rgba(40,20,15,.6)}
+.card{padding:26px 24px 22px;text-align:center}
+.big{font-size:3.2rem;line-height:1}
+.tag{display:inline-block;margin:10px 0;padding:3px 14px;border-radius:99px;color:#fff;font-size:.9rem}
+.q{font-size:1.3rem;line-height:1.4;margin:6px 0 12px}
+.t{font-size:1rem;opacity:.85;margin:0 0 18px;line-height:1.45}
+.close{border:0;border-radius:99px;background:var(--red);color:#fff;font:inherit;padding:8px 26px;cursor:pointer}
+.reset{display:block;margin:18px auto 0;background:none;border:0;color:var(--ink);opacity:.6;font:inherit;text-decoration:underline;cursor:pointer}
+.d{overflow:hidden}
+.n,.i{position:relative;z-index:1}
+.d::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.6) 50%,transparent 60%);transform:translateX(-130%);animation:sh 7s infinite;animation-delay:var(--dl,0s)}
+@keyframes sh{0%,70%{transform:translateX(-130%)}100%{transform:translateX(130%)}}
+.lights{display:flex;justify-content:space-between;max-width:720px;margin:0 auto 4px;padding:0 8px;position:relative;z-index:1}
+.lights::before{content:"";position:absolute;left:0;right:0;top:3px;height:2px;background:var(--ink);opacity:.35}
+.bulb{width:12px;height:16px;border-radius:50% 50% 55% 55%;margin-top:3px;background:currentColor;box-shadow:0 0 10px 3px currentColor;animation:tw 1.8s infinite ease-in-out}
+@keyframes tw{0%,100%{opacity:1}50%{opacity:.3}}
+.sp{position:fixed;pointer-events:none;color:#f6c453;z-index:0;animation:fl 3s infinite ease-in-out;text-shadow:0 0 8px #f6c453}
+@keyframes fl{0%,100%{opacity:0;transform:scale(.4) rotate(0)}50%{opacity:.85;transform:scale(1) rotate(45deg)}}
+.bs{position:fixed;pointer-events:none;z-index:1000;color:#f6c453;text-shadow:0 0 6px #fff;animation:bs .9s ease-out forwards}
+@keyframes bs{from{opacity:1;transform:translate(-50%,-50%) scale(.5)}to{opacity:0;transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1.4) rotate(120deg)}}
+.grid,h1,.sub,.reset{position:relative;z-index:1}
+dialog[open]{box-shadow:0 0 40px 8px rgba(246,196,83,.65);animation:pop .35s ease-out}
+@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.big{animation:tw 2s infinite}
+@media (prefers-reduced-motion:reduce){*,.d::before{animation:none!important}}
+</style>
+</head>
+<body>
+<div id="S" aria-hidden="true"></div>
+<div class="lights" id="L" aria-hidden="true"></div>
+<h1>Calendario dell’Avvento</h1>
+<p class="sub">Un pensiero al giorno per fermarti, riflettere e crescere. Tocca un numero per scoprire il messaggio.</p>
+<div class="grid" id="g"></div>
+<button class="reset" id="r">Ricomincia dal primo giorno</button>
+<dialog id="m"><div class="card"><div class="big" id="mi"></div><span class="tag" id="mt"></span><p class="q" id="mq"></p><p class="t" id="mx"></p><button class="close" id="c">Chiudi</button></div></dialog>
+<script>
+const C=["teal","cream","red","orange","cream","red","orange","teal","cream","red","cream","teal","red","orange","teal","orange","cream","teal","cream","red","teal","red","orange","red","cream"];
+const TAG={A:["Amicizia","#5a9e94"],I:["Introspezione","#c4361f"],V:["Valori e famiglia","#d98a2b"],R:["Impegno e responsabilità","#8a5a7a"]};
+const D=[
+["⛄","A","Un vero amico non è chi ti dice sempre di sì, ma chi ti dice la verità con gentilezza.","Pensa a una volta in cui un amico è stato sincero con te. Come ti sei sentito?"],
+["🎄","I","Prima di giudicare gli altri, prova a conoscere meglio te stesso.","Scrivi tre cose che ti rendono unico."],
+["🏠","V","La casa non è fatta solo di mura: è fatta delle persone che ti aspettano.","Oggi dì «grazie» a qualcuno della tua famiglia."],
+["🔮","R","Ogni impegno preso è una piccola promessa. Mantenerla ti rende una persona affidabile.","Qual è un impegno che hai preso e che oggi puoi portare avanti?"],
+["🐦","A","Un sorriso gratuito può cambiare la giornata di chi lo riceve.","Regala un sorriso a qualcuno che di solito non saluti."],
+["🎁","V","Il regalo più prezioso non si compra: è il tempo che dedichi a chi ami.","Cosa potresti fare oggi insieme a una persona di casa?"],
+["🌰","I","Anche le cose più grandi nascono piccole. Sii paziente con i tuoi progressi.","In cosa sei migliorato rispetto a un anno fa?"],
+["☕","A","Ascoltare davvero è un modo silenzioso di voler bene.","Oggi ascolta un compagno senza interromperlo."],
+["🔔","R","Chiedere scusa non ti rende debole: ti rende responsabile delle tue azioni.","C’è qualcuno a cui devi delle scuse?"],
+["🧢","I","Non devi essere perfetto: devi essere sincero con te stesso.","Quale emozione hai provato di più questa settimana?"],
+["🧦","V","Le tradizioni di famiglia sono radici: ti ricordano da dove vieni.","Chiedi a un nonno o a un genitore di raccontarti una tradizione."],
+["🎀","R","I compiti non sono un peso: sono i mattoncini del tuo futuro.","Oggi inizia per primo il compito che ti pesa di più."],
+["🍒","A","L’amicizia è come un giardino: va curata ogni giorno per fiorire.","Scrivi un messaggio gentile a un amico che non senti da un po’."],
+["❤️","V","Il rispetto comincia in casa: nelle parole che scegli e nel modo in cui le dici.","Oggi scegli parole gentili, anche quando sei stanco."],
+["🧁","I","Anche i giorni storti insegnano qualcosa. Cosa ti ha insegnato l’ultimo?","Pensa a un errore recente: cosa faresti diversamente?"],
+["🌿","R","Prenderti cura dell’ambiente è prenderti cura del tuo futuro.","Qual è un piccolo gesto green che puoi fare ogni giorno?"],
+["🕯️","I","Una candela non perde luce se ne accende un’altra. Condividere ti arricchisce.","Cosa sai fare bene e potresti insegnare a qualcuno?"],
+["🥾","R","Un passo alla volta si arriva ovunque, purché non smetti di camminare.","Qual è il tuo obiettivo? Scrivi il primo passo."],
+["🍪","A","Includere chi è rimasto solo è il gesto di amicizia più coraggioso.","Oggi invita qualcuno a sedersi con te."],
+["⛸️","V","Cadere fa parte dell’imparare. In famiglia, qualcuno è sempre pronto a rialzarti.","Chi ti ha aiutato a rialzarti? Digli grazie."],
+["🎁","R","Se puoi aiutare qualcuno e non lo fai, anche la scelta di non agire ha un peso.","Dove puoi dare una mano oggi, a scuola o a casa?"],
+["🎈","I","Fermati un minuto: respira e chiediti cosa conta davvero per te.","Scrivi i tre valori più importanti per te."],
+["🍬","A","Le differenze tra amici non dividono: rendono il gruppo più ricco.","Cosa hai imparato da un amico diverso da te?"],
+["🍵","V","Una cena senza telefoni può diventare il momento più bello della giornata.","Stasera prova a parlare con la famiglia a tavola, senza schermi."],
+["🌟","V","Il Natale è un invito a donare attenzione, gentilezza e tempo a chi ci sta accanto.","Qual è il dono più bello che hai ricevuto quest’anno senza che costasse nulla?"]
+];
+const g=document.getElementById("g"),m=document.getElementById("m");
+let done=new Set();
+try{done=new Set(JSON.parse(localStorage.getItem("avv")||"[]"))}catch(e){}
+const save=()=>{try{localStorage.setItem("avv",JSON.stringify([...done]))}catch(e){}};
+D.pop();
+D.push(D.length?null:null);D.pop();
+const last=["🎄","V","Il Natale è un invito a donare attenzione, gentilezza e tempo a chi ci sta accanto.","Qual è il dono più bello che hai ricevuto quest’anno senza che costasse nulla?"];
+const all=D.slice(0,24).concat([last]);
+all.forEach((x,k)=>{const b=document.createElement("button");b.className="d "+C[k]+(done.has(k)?" done":"");b.setAttribute("aria-label","Giorno "+(k+1));b.innerHTML='<span class="n">'+(k+1)+'</span><span class="i">'+x[0]+'</span>';
+b.onclick=e=>{burst(e);mi.textContent=x[0];mt.textContent=TAG[x[1]][0];mt.style.background=TAG[x[1]][1];mq.textContent=x[2];mx.textContent=x[3];done.add(k);b.classList.add("done");save();m.showModal()};g.appendChild(b)});
+const LC=["#f2432f","#f6a85c","#5a9e94","#f4b9b5","#f6c453"];
+for(let i=0;i<15;i++){const s=document.createElement("span");s.className="bulb";s.style.color=LC[i%5];s.style.animationDelay=(i*0.25)+"s";L.appendChild(s)}
+for(let i=0;i<22;i++){const s=document.createElement("span");s.className="sp";s.textContent=i%3?"✦":"✧";s.style.left=Math.random()*96+"%";s.style.top=Math.random()*94+"%";s.style.fontSize=(10+Math.random()*16)+"px";s.style.animationDelay=(Math.random()*3)+"s";s.style.animationDuration=(2+Math.random()*3)+"s";S.appendChild(s)}
+document.querySelectorAll(".d").forEach((b,i)=>b.style.setProperty("--dl",(i*0.35)+"s"));
+function burst(e){const x=e.clientX||innerWidth/2,y=e.clientY||innerHeight/2;for(let i=0;i<14;i++){const s=document.createElement("span");s.className="bs";s.textContent=i%2?"✦":"✧";const a=Math.random()*6.28,d=50+Math.random()*70;s.style.left=x+"px";s.style.top=y+"px";s.style.setProperty("--x",Math.cos(a)*d+"px");s.style.setProperty("--y",Math.sin(a)*d+"px");s.style.fontSize=(12+Math.random()*14)+"px";document.body.appendChild(s);setTimeout(()=>s.remove(),950)}}
+c.onclick=()=>m.close();
+m.addEventListener("click",e=>{if(e.target===m)m.close()});
+r.onclick=()=>{done=new Set();save();document.querySelectorAll(".d").forEach(b=>b.classList.remove("done"))};
+</script>
+</body>
+</html>
