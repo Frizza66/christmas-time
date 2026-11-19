@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌍 Usanze e tradizioni nel mondo - terza media</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      background: #f5f2eb;
+      color: #1e2b2f;
+      padding: 20px;
+      line-height: 1.5;
+    }
+    .app-container {
+      max-width: 1300px;
+      margin: 0 auto;
+      background: #ffffffd9;
+      backdrop-filter: blur(4px);
+      border-radius: 48px 48px 32px 32px;
+      box-shadow: 0 20px 40px rgba(0, 20, 30, 0.15);
+      padding: 30px 25px;
+      border: 1px solid #ffffffaa;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    h1 {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(145deg, #2c5e4b, #1f4b3a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: inline-block;
+      padding-bottom: 8px;
+      border-bottom: 4px dotted #c2b280;
+    }
+    .subhead {
+      font-size: 1.3rem;
+      color: #5b6e6b;
+      margin-top: 8px;
+      font-style: italic;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .subhead span {
+      background: #e7dfd1;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 1rem;
+      color: #2c4b3e;
+    }
+    .intro-box {
+      background: #fefcf5;
+      border-left: 8px solid #a7c0b0;
+      padding: 18px 24px;
+      border-radius: 24px;
+      margin: 20px 0 28px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+      font-size: 1.05rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 28px;
+      margin: 30px 0 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 12px 24px -8px rgba(0, 30, 20, 0.15);
+      transition: transform 0.2s ease, box-shadow 0.25s;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #e2dcd0;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 30px -10px rgba(40, 70, 60, 0.25);
+    }
+    .card-header {
+      padding: 18px 18px 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .flag-emoji {
+      font-size: 2.4rem;
+      line-height: 1;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+    .country-name {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: #1e3b32;
+      line-height: 1.2;
+    }
+    .country-sub {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: #778b84;
+      margin-top: 2px;
+    }
+    .image-area {
+      background: #e9e5db;
+      margin: 0 16px 16px;
+      border-radius: 24px;
+      aspect-ratio: 16 / 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+    }
+    .image-placeholder {
+      font-size: 3.8rem;
+      text-align: center;
+      opacity: 0.8;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #5f6b62;
+      background: #ece7dd;
+      font-size: 3rem;
+      gap: 4px;
+    }
+    .image-placeholder small {
+      font-size: 0.9rem;
+      background: #ffffffcc;
+      padding: 4px 12px;
+      border-radius: 30px;
+      color: #3b5a4b;
+      font-weight: 500;
+    }
+    .image-area img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .card-content {
+      padding: 0 18px 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .tradition-text {
+      font-size: 1rem;
+      color: #2e3f3a;
+      margin-bottom: 18px;
+      flex: 1;
+    }
+    .tradition-text strong {
+      color: #1d4b3a;
+    }
+    .upload-area {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      background: #f6f3ed;
+      padding: 10px 14px;
+      border-radius: 40px;
+      border: 1px dashed #b7b0a1;
+    }
+    .upload-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #d9e0d6;
+      color: #1e3b32;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 8px 16px;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid #b9c7b9;
+      letter-spacing: 0.01em;
+    }
+    .upload-label:hover {
+      background: #cbd8c8;
+      border-color: #8ea894;
+    }
+    .upload-label input[type="file"] {
+      display: none;
+    }
+    .reset-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #8b7a6a;
+      padding: 6px 10px;
+      border-radius: 50%;
+      transition: 0.2s;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+    .reset-btn:hover {
+      background: #e3dbd0;
+      color: #4a3f36;
+    }
+    .reset-btn span {
+      font-size: 0.9rem;
+      margin-left: 4px;
+    }
+    .footer-note {
+      margin-top: 40px;
+      padding: 18px 0 8px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #7b8b84;
+      border-top: 1px solid #d9d2c5;
+    }
+    .footer-note .highlight {
+      background: #e4ddcf;
+      padding: 4px 12px;
+      border-radius: 30px;
+      font-weight: 500;
+    }
+    @media (max-width: 600px) {
+      .app-container {
+        padding: 18px 12px;
+      }
+      h1 {
+        font-size: 1.9rem;
+      }
+      .grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      .upload-area {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="app-container">
+  <header>
+    <h1>🌍 Usanze & Tradizioni nel mondo</h1>
+    <div class="subhead">
+      <span>per la terza media</span>
+      <span>📸 immagini modificabili</span>
+    </div>
+  </header>
+
+  <div class="intro-box">
+    ✨ Ogni paese ha usanze uniche. Inserisci le tue immagini cliccando su <strong>"Carica immagine"</strong> sotto ogni tradizione. 
+    Puoi sempre ripristinare il segnaposto originale con il tasto <strong>↺</strong>.
+  </div>
+
+  <!-- Griglia dei paesi -->
+  <div class="grid" id="worldGrid"></div>
+
+  <div class="footer-note">
+    <span class="highlight">🏫 Apprendimento attivo</span> — Sostituisci le emoji con foto reali delle tradizioni che stai studiando.
+  </div>
+</div>
+
+<script>
+  (function() {
+    // Dati delle tradizioni (paesi, emoji, descrizione, id univoco)
+    const traditions = [
+      {
+        id: 'giappone',
+        country: 'Giappone',
+        flag: '🇯🇵',
+        sub: 'Asia orientale',
+        emoji: '🌸🎋',
+        description: 'La cerimonia del tè (chanoyu) è un rituale di armonia e rispetto. Durante la fioritura dei ciliegi (hanami) le famiglie fanno picnic sotto gli alberi.'
+      },
+      {
+        id: 'messico',
+        country: 'Messico',
+        flag: '🇲🇽',
+        sub: 'America centrale',
+        emoji: '💀🌼',
+        description: 'Il Día de los Muertos (Giorno dei Morti) è una festa colorata per onorare gli antenati con altari, cibo e musica. Si crede che i defunti tornino a trovare i vivi.'
+      },
+      {
+        id: 'india',
+        country: 'India',
+        flag: '🇮🇳',
+        sub: 'Asia meridionale',
+        emoji: '🪔🎨',
+        description: 'Diwali, la festa delle luci, celebra la vittoria del bene sul male. Le case vengono decorate con lanterne e si scambiano dolci. Inoltre l’Holi è la festa dei colori.'
+      },
+      {
+        id: 'marocco',
+        country: 'Marocco',
+        flag: '🇲🇦',
+        sub: 'Nord Africa',
+        emoji: '🫖🍃',
+        description: 'Il tè alla menta è un rituale di ospitalità. Viene versato da un’altezza per ossigenare la bevanda. Durante il Ramadan si condivide la zuppa harira al tramonto.'
+      },
+        {
+        id: 'italia',
+        country: 'Italia',
+        flag: '🇮🇹',
+        sub: 'Europa meridionale',
+        emoji: '🍝🎭',
+        description: 'Il Carnevale di Venezia con le maschere e la commedia dell’arte. La pasta fatta in casa è una tradizione domenicale in molte regioni. La pizza è patrimonio UNESCO.'
+      },
+        {
+        id: 'kenya',
+        country: 'Kenya',
+        flag: '🇰🇪',
+        sub: 'Africa orientale',
+        emoji: '🦁🥁',
+        description: 'Le danze tradizionali Masai con i salti e i canti. La cerimonia del tè nel pomeriggio è un momento sociale. La festa di Madaraka celebra l’indipendenza.'
+      },
+      {
+        id: 'cina',
+        country: 'Cina',
+        flag: '🇨🇳',
+        sub: 'Asia orientale',
+        emoji: '🐉🥟',
+        description: 'Capodanno cinese: sfilate con draghi, fuochi d’artificio e la cena di riunione. Si regalano buste rosse (hongbao) con denaro per augurare fortuna.'
+      },
+      {
+        id: 'perù',
+        country: 'Perù',
+        flag: '🇵🇪',
+        sub: 'America meridionale',
+        emoji: '🌽🎉',
+        description: 'Inti Raymi, la festa del sole inca, si celebra a Cusco. Le comunità andine offrono cibo alla Pachamama (Madre Terra) e ballano in costumi tradizionali.'
+      }
+    ];
+
+    // Elemento griglia
+    const grid = document.getElementById('worldGrid');
+
+    // Funzione per creare il markup di una card
+    function createCard(trad) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.dataset.id = trad.id;
+
+      // Header
+      const header = document.createElement('div');
+      header.className = 'card-header';
+      header.innerHTML = `
+        <div class="flag-emoji">${trad.flag}</div>
+        <div>
+          <div class="country-name">${trad.country}</div>
+          <div class="country-sub">${trad.sub}</div>
+        </div>
+      `;
+
+      // Area immagine (contenitore con id univoco)
+      const imageArea = document.createElement('div');
+      imageArea.className = 'image-area';
+      imageArea.id = `img-area-${trad.id}`;
+
+      // Placeholder (con emoji grande)
+      const placeholder = document.createElement('div');
+      placeholder.className = 'image-placeholder';
+      placeholder.id = `placeholder-${trad.id}`;
+      placeholder.innerHTML = `
+        <div style="font-size: 3.4rem; line-height: 1.2;">${trad.emoji}</div>
+        <small>📷 carica una foto</small>
+      `;
+      imageArea.appendChild(placeholder);
+
+      // Contenuto testuale
+      const content = document.createElement('div');
+      content.className = 'card-content';
+
+      const textDiv = document.createElement('div');
+      textDiv.className = 'tradition-text';
+      textDiv.innerHTML = `<strong>${trad.country}:</strong> ${trad.description}`;
+
+      // Area di upload
+      const uploadArea = document.createElement('div');
+      uploadArea.className = 'upload-area';
+
+      const label = document.createElement('label');
+      label.className = 'upload-label';
+      label.innerHTML = `🖼️ Carica immagine <input type="file" accept="image/*" data-country="${trad.id}" class="file-input">`;
+
+      const resetBtn = document.createElement('button');
+      resetBtn.className = 'reset-btn';
+      resetBtn.setAttribute('aria-label', 'Ripristina immagine originale');
+      resetBtn.innerHTML = '↺<span>reset</span>';
+      resetBtn.dataset.country = trad.id;
+
+      uploadArea.appendChild(label);
+      uploadArea.appendChild(resetBtn);
+      content.appendChild(textDiv);
+      content.appendChild(uploadArea);
+
+      // Assembla la card
+      card.appendChild(header);
+      card.appendChild(imageArea);
+      card.appendChild(content);
+
+      return card;
+    }
+
+    // Popola la griglia
+    traditions.forEach(trad => {
+      grid.appendChild(createCard(trad));
+    });
+
+    // Gestione caricamento immagini
+    grid.addEventListener('change', function(e) {
+      if (!e.target.classList.contains('file-input')) return;
+
+      const fileInput = e.target;
+      const countryId = fileInput.dataset.country;
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      // Controlla che sia un'immagine
+      if (!file.type.startsWith('image/')) {
+        alert('Per favore seleziona un file immagine (jpeg, png, ecc.)');
+        fileInput.value = '';
+        return;
+      }
+
+      const imageArea = document.getElementById(`img-area-${countryId}`);
+      if (!imageArea) return;
+
+      // Rimuovi placeholder se presente
+      const oldPlaceholder = document.getElementById(`placeholder-${countryId}`);
+      if (oldPlaceholder) oldPlaceholder.remove();
+
+      // Rimuovi eventuale img precedente
+      const oldImg = imageArea.querySelector('img');
+      if (oldImg) oldImg.remove();
+
+      // Crea nuova immagine
+      const img = document.createElement('img');
+      img.alt = `Immagine tradizione ${countryId}`;
+      const objectUrl = URL.createObjectURL(file);
+      img.src = objectUrl;
+
+      // Rilascia l'objectURL dopo il caricamento per liberare memoria (ma teniamo la visualizzazione)
+      img.onload = () => {
+        // Possiamo revocare l'URL dopo che l'immagine è caricata? 
+        // Se lo revochiamo subito, l'immagine potrebbe non essere più visualizzata in alcuni browser.
+        // Lo facciamo dopo un timeout per sicurezza.
+        setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+      };
+
+      imageArea.appendChild(img);
+
+      // Resetta il valore del file input per permettere di ricaricare lo stesso file
+      fileInput.value = '';
+    });
+
+    // Gestione reset (ripristina placeholder)
+    grid.addEventListener('click', function(e) {
+      const resetBtn = e.target.closest('.reset-btn');
+      if (!resetBtn) return;
+
+      const countryId = resetBtn.dataset.country;
+      const imageArea = document.getElementById(`img-area-${countryId}`);
+      if (!imageArea) return;
+
+      // Rimuovi immagine corrente
+      const currentImg = imageArea.querySelector('img');
+      if (currentImg) currentImg.remove();
+
+      // Trova i dati della tradizione per ripristinare l'emoji corretta
+      const trad = traditions.find(t => t.id === countryId);
+      if (!trad) return;
+
+      // Ricrea il placeholder solo se non esiste già
+      let placeholder = document.getElementById(`placeholder-${countryId}`);
+      if (!placeholder) {
+        placeholder = document.createElement('div');
+        placeholder.className = 'image-placeholder';
+        placeholder.id = `placeholder-${countryId}`;
+        placeholder.innerHTML = `
+          <div style="font-size: 3.4rem; line-height: 1.2;">${trad.emoji}</div>
+          <small>📷 carica una foto</small>
+        `;
+        imageArea.appendChild(placeholder);
+      }
+    });
+
+  })();
+</script>
+</body>
+</html>
